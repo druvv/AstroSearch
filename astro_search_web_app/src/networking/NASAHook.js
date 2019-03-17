@@ -129,6 +129,40 @@ function buildSearchRequest(searchText: string): Request {
 }
 
 /**
+ * A hook to debounce a function call.
+ *
+ * @param value The value that will be changing in a stateful manner;
+ * @param func The function to call with the debounced value;
+ * @param delay The delay that this function should debounce with.
+ */
+export function useDebounce(value, func, delay) {
+    useEffect(
+        () => {
+            // Set debouncedValue to value (passed in) after the specified delay
+            const handler = setTimeout(() => {
+                func(value);
+            }, delay);
+
+            // Return a cleanup function that will be called every time ...
+            // ... useEffect is re-called. useEffect will only be re-called ...
+            // ... if value changes (see the inputs array below).
+            // This is how we prevent debouncedValue from changing if value is ...
+            // ... changed within the delay period. Timeout gets cleared and restarted.
+            // To put it in context, if the user is typing within our app's ...
+            // ... search box, we don't want the debouncedValue to update until ...
+            // ... they've stopped typing for more than 500ms.
+            return () => {
+                clearTimeout(handler);
+            };
+        },
+        // Only re-call effect if value changes
+        // You could also add the "delay" var to inputs array if you ...
+        // ... need to be able to change that dynamically.
+        [value]
+    );
+}
+
+/**
  * A React Hook that simplifies the usage of the NASA image search api.
  * @param {string} initialSearchText - The initial search text for the function.
  * @returns {*[]} An array of [isLoading, isError, data, doSearch(string)] where doSearch
