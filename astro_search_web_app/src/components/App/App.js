@@ -37,7 +37,7 @@ function App() {
                 }}
             />
             <AstroParallaxSearchBar value={initialSearch} doSearch={doSearch} />
-            <Card className='App-content' style={{width: 'calc(100% - 80px)'}}>
+            <div className='App-content' style={{width: 'calc(100% - 80px)'}}>
                 {isError && <div>Something went wrong ...</div>}
                 {isLoading &&
                 <div style={{display: 'flex', width: '100%', justifyContent: 'center'}}>
@@ -57,7 +57,7 @@ function App() {
                     </Grid>
                 </>
                 }
-            </Card>
+            </div>
         </div>
     )
 }

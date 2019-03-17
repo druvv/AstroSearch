@@ -16,7 +16,7 @@ export function AstroGridItem(props) {
     const { nasaImage } = props;
 
     return (
-        <Grid item style={{padding: '8px'}} xs={3} key={nasaImage.nasaID}>
+        <Grid item style={{padding: '8px'}} xs={12} sm={6} md={3} key={nasaImage.nasaID}>
             <Card style={{marginBottom: '0px', marginTop: '0px'}} >
                 <CardActionArea>
                     <CardHeader
