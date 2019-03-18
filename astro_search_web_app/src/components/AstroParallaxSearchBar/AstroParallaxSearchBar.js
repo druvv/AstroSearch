@@ -1,22 +1,19 @@
+//@flow
 import React, { useState } from "react";
+// Data
 import { useDebounce } from "../../networking/NASAHook";
-
-
-import './AstroParallaxSearchBar.css'
 // Main Componenets
 import Parallax from '../Parallax/Parallax';
 import HeaderBackground from "../../assets/img/header-bg.jpg";
 import InputBase from '@material-ui/core/InputBase';
-
 import SearchIcon from '@material-ui/icons/Search'
+//Styles
+import './AstroParallaxSearchBar.css'
 
 /**
- * A search bar and a parallax effect
- *
- * @param props Takes value: string and doSearch: ((string): void) which calls .
- * @constructor
+ * A search bar with a parallax effect and image subheader
  */
-export default function AstroParallaxSearchBar(props) {
+export function AstroParallaxSearchBar(props: {value: string, doSearch: ((string) => void)}) {
 
     const { value, doSearch } = props;
     const [searchText, setSearchText] = useState(value);

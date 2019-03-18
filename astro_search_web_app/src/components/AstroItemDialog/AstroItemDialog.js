@@ -1,21 +1,28 @@
+//@flow
 import React from 'react';
-
+// Data
+import { NASAImage } from "../../networking/Models";
+// Main Components
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
-
+// Styles
 import './AstroItemDialog.css';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
-export function AstroItemDialog(props) {
+/**
+ * A NASA Image detail dialog.
+ */
+function AstroItemDialog(props: ({open: boolean, onClose: (() => void), selectedImage?: NASAImage})) {
     const { open, onClose, selectedImage } = props;
     return (
         <Dialog fullScreen={false} open={open} fullWidth={true} maxWidth='md' onClose={onClose}>
             { selectedImage &&
             <>
-                <DialogTitle id="scroll-dialog-title">{selectedImage.title}</DialogTitle>
+                <DialogTitle id='scroll-dialog-title'>{selectedImage.title}</DialogTitle>
                 <DialogContent>
                     <div className='split-content-box'>
                         <div className='split-content-left'>
@@ -44,7 +51,7 @@ export function AstroItemDialog(props) {
                                 {'Keywords: ' + selectedImage.keywords.join(', ')}
                             </DialogContentText>
                             <DialogContentText variant='body1'>
-                                {"NASA ID: " + selectedImage.nasaID}
+                                {'NASA ID: ' + selectedImage.nasaID}
                             </DialogContentText>
                         </div>
                     </div>
@@ -59,3 +66,5 @@ export function AstroItemDialog(props) {
         </Dialog>
     );
 }
+
+export default withMobileDialog()(AstroItemDialog);

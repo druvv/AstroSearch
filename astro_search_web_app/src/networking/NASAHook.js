@@ -72,6 +72,7 @@ function useDataAPI(initialRequest: Request, initialData) {
             }
         };
 
+        // Intentionally ignore resulting promise... Response from fetch request will update the component's state.
         fetchData();
 
         // If the component unmounts before the request finish avoid updating the state.
@@ -90,9 +91,11 @@ function useDataAPI(initialRequest: Request, initialData) {
 /**
  * Builds a search request for the given search text.
  * @param {string} searchText - A string representing the search text.
+ * @param {?string} startYear - An optional start year with which to filter the results.
+ * @param {?string} endYear - An optional end year with which to filter the results.
  * @returns {Request} A request object representing a search with NASA's image api.
  */
-function buildSearchRequest(searchText: string): Request {
+function buildSearchRequest(searchText: string, startYear: ?string, endYear: ?string): Request {
 
     // Build our postFunction that parses response data into an array of NASAImage objects.
     const postFunction = (data: any): [NASAImage] => {
@@ -110,7 +113,7 @@ function buildSearchRequest(searchText: string): Request {
         // Construct NASAImages from json objects.
         return nasaJSONObjs.map(j => {
 
-            // Fix crash on missing keywords by giving keywords default empty array value
+            // Fix crash on missing keywords JSON var by giving keywords default empty array value
             let keywords = [];
             if (j.keywords && Array.isArray(j.keywords)) {
                 keywords = j.keywords;
@@ -128,9 +131,20 @@ function buildSearchRequest(searchText: string): Request {
         });
     };
 
+    // Build parameters
+    let params = {};
+    params.q = searchText;
+    params.media_type = 'image';
+    if (startYear != null) {
+        params.year_start = startYear
+    }
+    if (endYear != null) {
+        params.year_end = endYear
+    }
+
     return new Request(
         API_URL_SEARCH,
-        {q: searchText, media_type: "image"},
+        params,
         postFunction
     );
 }
@@ -142,7 +156,7 @@ function buildSearchRequest(searchText: string): Request {
  * @param func The function to call with the debounced value;
  * @param delay The delay that this function should debounce with.
  */
-export function useDebounce(value, func, delay) {
+export function useDebounce(value: any, func: (any) => void, delay: number) {
     useEffect(
         () => {
             // Set debouncedValue to value (passed in) after the specified delay
@@ -150,20 +164,20 @@ export function useDebounce(value, func, delay) {
                 func(value);
             }, delay);
 
-            // Return a cleanup function that will be called every time ...
-            // ... useEffect is re-called. useEffect will only be re-called ...
+            // Return a cleanup function that will be called every time
+            // ... useEffect is re-called. useEffect will only be re-called
             // ... if value changes (see the inputs array below).
-            // This is how we prevent debouncedValue from changing if value is ...
+            // This is how we prevent debouncedValue from changing if value is
             // ... changed within the delay period. Timeout gets cleared and restarted.
-            // To put it in context, if the user is typing within our app's ...
-            // ... search box, we don't want the debouncedValue to update until ...
+            // To put it in context, if the user is typing within our app's
+            // ... search box, we don't want the debouncedValue to update until
             // ... they've stopped typing for more than 500ms.
             return () => {
                 clearTimeout(handler);
             };
         },
         // Only re-call effect if value changes
-        // You could also add the "delay" var to inputs array if you ...
+        // You could also add the "delay" var to inputs array if you
         // ... need to be able to change that dynamically.
         [value]
     );
@@ -171,16 +185,21 @@ export function useDebounce(value, func, delay) {
 
 /**
  * A React Hook that simplifies the usage of the NASA image search api.
- * @param {string} initialSearchText - The initial search text for the function.
- * @returns {*[]} An array of [isLoading, isError, data, doSearch(string)] where doSearch
- * searches with the given searchText.
+ * @param initialSearchText - The initial search text for the function.
+ * @returns An object of {isLoading, isError, data, doSearch(string, ?string, ?string)} where doSearch
+ * searches with the given searchText, and optional start and end years.
  */
-export function useNASASearch(initialSearchText: string): {isLoading: boolean, isError: boolean, nasaImages: ?[NASAImage], doSearch: ((string) => void)} {
+export function useNASASearch(initialSearchText: string): {
+    isLoading: boolean,
+    isError: boolean,
+    nasaImages: ?[NASAImage],
+    doSearch: ((searchText: string, startYear: ?string, endYear: ?string) => void)
+} {
 
     const [ isLoading, isError, data, doFetch] = useDataAPI(buildSearchRequest(initialSearchText),null);
 
-    const doSearch = (searchText: string) => {
-        const request = buildSearchRequest(searchText);
+    const doSearch = (searchText: string, startYear: ?string, endYear: ?string) => {
+        const request = buildSearchRequest(searchText, startYear, endYear);
         doFetch(request);
     };
 

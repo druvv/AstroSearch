@@ -1,28 +1,29 @@
 //@flow
 import React from "react";
-// Styles
-import './AstroGridItem.css'
+// Data
+import {NASAImage} from "../../networking/Models";
 // Main Components
 import Grid from '@material-ui/core/Grid';
 import Card from "../Card/Card.js";
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardMedia from '@material-ui/core/CardMedia';
-import CardBody from '../Card/CardBody.js';
-import Paper from '@material-ui/core/Paper';
-import Typo from "@material-ui/core/Typography";
+// Styles
+import './AstroGridItem.css'
 
-
-export function AstroGridItem(props) {
+/**
+ * The Material Grid Item for a NASAImage
+ */
+export function AstroGridItem(props: {nasaImage: NASAImage, selectImage: (i: NASAImage) => void}) {
     const { nasaImage, selectImage } = props;
 
     return (
-        <Grid item style={{padding: '8px'}} xs={12} sm={6} md={3} key={nasaImage.nasaID}>
+        <Grid item style={{padding: '8px'}} xs={12} sm={6} md={3} xl={2} key={nasaImage.nasaID}>
             <Card style={{marginBottom: '0px', marginTop: '0px'}} >
                 <CardActionArea onClick={ () => selectImage(nasaImage) }>
                     <CardHeader
                         title={nasaImage.title}
-                        // Disable flex on root so that the title truncates properly
+                        // Disable flex on root so that the title truncates properly on the card.
                         style={{display: 'block'}}
                         titleTypographyProps={{noWrap: true, variant: 'subtitle1'}}
                         subheader={new Date(nasaImage.dateCreated).toLocaleDateString()}

@@ -1,29 +1,28 @@
 // @flow
-import React, { useState, useEffect, useReducer } from 'react';
-
-import { useNASASearch, useDebounce } from "../../networking/NASAHook";
-
-// nodejs library that concatenates classes
-import classNames from "classnames";
-import './App.css';
+// Data
+import React, { useState } from 'react';
+import { useNASASearch } from "../../networking/NASAHook";
 // Main Components
 import Header from '../Header/Header';
 import HeaderLinks from '../Header/HeaderLinks'
-import AstroParallaxSearchBar from '../AstroParallaxSearchBar/AstroParallaxSearchBar'
 import Grid from '@material-ui/core/Grid';
-import Card from "../Card/Card.js";
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+// Custom Components
+import {AstroParallaxSearchBar} from '../AstroParallaxSearchBar/AstroParallaxSearchBar'
 import {AstroGridItem} from "../AstroGridItem/AstroGridItem";
-import {AstroItemDialog} from "../AstroItemDialog/AstroItemDialog";
-import {Typography} from "@material-ui/core";
+import AstroItemDialog from "../AstroItemDialog/AstroItemDialog";
 import {NASAImage} from "../../networking/Models";
+// Styling
+import './App.css';
 
 function App() {
 
     // Use Data Hook
     const initialSearch = 'Curiosity Rover';
     const {isLoading, isError, nasaImages, doSearch } = useNASASearch(initialSearch);
+    // Keep track of the selected image, and display dialog when image is selected.
+    // When dialog is closing, image should stay selected so that dialog can display the content
+    // ... all the way through its closing animation.
     const [lastSelectedImage, setLastSelectedImage] = useState(null);
     const [imageDetailOpen, setImageDetailOpen] = useState(false);
 

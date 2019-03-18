@@ -18,6 +18,7 @@ class Parallax extends React.Component {
         };
         this.resetTransform = this.resetTransform.bind(this);
     }
+    // Create the parallax effect by translating the image background based on the scroll offset
     componentDidMount() {
         var windowScrollTop = window.pageYOffset / 3;
         this.setState({
@@ -34,6 +35,7 @@ class Parallax extends React.Component {
             transform: "translate3d(0," + windowScrollTop + "px,0)"
         });
     }
+
     render() {
         const {
             classes,
