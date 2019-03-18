@@ -109,13 +109,20 @@ function buildSearchRequest(searchText: string): Request {
 
         // Construct NASAImages from json objects.
         return nasaJSONObjs.map(j => {
+
+            // Fix crash on missing keywords by giving keywords default empty array value
+            let keywords = [];
+            if (j.keywords && Array.isArray(j.keywords)) {
+                keywords = j.keywords;
+            }
+
             return new NASAImage(
                 j.nasa_id,
                 j.link,
                 j.title,
                 j.description,
                 j.date_created,
-                j.keywords,
+                keywords,
                 j.secondary_creator
             );
         });

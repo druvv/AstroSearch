@@ -40,7 +40,7 @@ export default function AstroParallaxSearchBar(props) {
                         }}
                         value={searchText} style={{color: 'white'}}
                         classes={{root: 'inputRoot', input: 'inputInput'}}
-                        placeholder="Search…"
+                        placeholder="Search the stars…"
                     />
                 </div>
             </div>

@@ -1,3 +1,4 @@
+//@flow
 import React from "react";
 // Styles
 import './AstroGridItem.css'
@@ -13,12 +14,12 @@ import Typo from "@material-ui/core/Typography";
 
 
 export function AstroGridItem(props) {
-    const { nasaImage } = props;
+    const { nasaImage, selectImage } = props;
 
     return (
         <Grid item style={{padding: '8px'}} xs={12} sm={6} md={3} key={nasaImage.nasaID}>
             <Card style={{marginBottom: '0px', marginTop: '0px'}} >
-                <CardActionArea>
+                <CardActionArea onClick={ () => selectImage(nasaImage) }>
                     <CardHeader
                         title={nasaImage.title}
                         // Disable flex on root so that the title truncates properly
