@@ -21,7 +21,7 @@ function HeaderLinks({ ...props }) {
             <ListItem className={classes.listItem}>
                 <Tooltip
                     id="linkedin-tooltip"
-                    title="Checkout my linkedin page"
+                    title="Checkout my LinkedIn profile"
                     placement={window.innerWidth > 959 ? "top" : "left"}
                     classes={{ tooltip: classes.tooltip }}
                 >
@@ -38,13 +38,13 @@ function HeaderLinks({ ...props }) {
             <ListItem className={classes.listItem}>
                 <Tooltip
                     id="github-tooltip"
-                    title="Checkout my github"
+                    title="Project Github page"
                     placement={window.innerWidth > 959 ? "top" : "left"}
                     classes={{ tooltip: classes.tooltip }}
                 >
                     <Button
                         color="transparent"
-                        href="https://github.com/dsringari"
+                        href="https://github.com/dsringari/AstroSearch"
                         target="_blank"
                         className={classes.navLink}
                     >

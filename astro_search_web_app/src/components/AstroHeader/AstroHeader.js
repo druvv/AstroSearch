@@ -16,7 +16,7 @@ import Menu from "@material-ui/icons/Menu";
 // core components
 import headerStyle from "./HeaderStyle.js";
 
-class Header extends React.Component {
+class AstroHeader extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,6 +28,7 @@ class Header extends React.Component {
     handleDrawerToggle() {
         this.setState({ mobileOpen: !this.state.mobileOpen });
     }
+    // Setup scroll listeners to change the header after scrolling 200px
     componentDidMount() {
         if (this.props.changeColorOnScroll) {
             window.addEventListener("scroll", this.headerColorChange);
@@ -121,11 +122,11 @@ class Header extends React.Component {
     }
 }
 
-Header.defaultProp = {
+AstroHeader.defaultProp = {
     color: "white"
 };
 
-Header.propTypes = {
+AstroHeader.propTypes = {
     classes: PropTypes.object.isRequired,
     color: PropTypes.oneOf([
         "primary",
@@ -165,4 +166,4 @@ Header.propTypes = {
     })
 };
 
-export default withStyles(headerStyle)(Header);
+export default withStyles(headerStyle)(AstroHeader);

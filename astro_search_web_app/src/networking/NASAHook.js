@@ -90,10 +90,10 @@ function useDataAPI(initialRequest: Request, initialData) {
 
 /**
  * Builds a search request for the given search text.
- * @param {string} searchText - A string representing the search text.
- * @param {?string} startYear - An optional start year with which to filter the results.
- * @param {?string} endYear - An optional end year with which to filter the results.
- * @returns {Request} A request object representing a search with NASA's image api.
+ * @param searchText - A string representing the search text.
+ * @param startYear - An optional start year with which to filter the results.
+ * @param endYear - An optional end year with which to filter the results.
+ * @returns A request object representing a search with NASA's image api.
  */
 function buildSearchRequest(searchText: string, startYear: ?string, endYear: ?string): Request {
 
@@ -152,8 +152,8 @@ function buildSearchRequest(searchText: string, startYear: ?string, endYear: ?st
 /**
  * A hook to debounce a function call.
  *
- * @param values The values that will be changing in a stateful manner;
- * @param func The function to call with the spread of the value array;
+ * @param values The values that will be changing in a stateful manner.
+ * @param func The function to call with the spread of the value array.
  * @param delay The delay that this function should debounce with.
  */
 export function useDebounce(values: Array<any>, func: (any) => void, delay: number) {

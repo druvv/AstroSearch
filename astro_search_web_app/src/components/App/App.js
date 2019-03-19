@@ -2,9 +2,10 @@
 // Data
 import React, { useState } from 'react';
 import { useNASASearch } from "../../networking/NASAHook";
+import { NASAImage } from "../../networking/Models";
 // Main Components
-import Header from '../Header/Header';
-import HeaderLinks from '../Header/HeaderLinks'
+import Header from '../AstroHeader/AstroHeader';
+import HeaderLinks from '../AstroHeader/HeaderLinks'
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 // Custom Components
@@ -12,7 +13,6 @@ import {AstroParallaxSearchBar} from '../AstroParallaxSearchBar/AstroParallaxSea
 import {AstroGridItem} from "../AstroGridItem/AstroGridItem";
 import AstroItemDialog from "../AstroItemDialog/AstroItemDialog";
 import {AstroShareDialog} from "../AstroShareDialog/AstroShareDialog";
-import {NASAImage} from "../../networking/Models";
 // Styling
 import './App.css';
 
@@ -20,7 +20,7 @@ import './App.css';
 function App() {
 
     // Use Data Hook
-    const initialSearch = 'Curiosity Rover';
+    const initialSearch = 'Supernova';
     const {isLoading, isError, nasaImages, doSearch } = useNASASearch(initialSearch);
     // Keep track of the selected image, and display dialog when image is selected.
     // When dialog is closing, image should stay selected so that dialog can display the content
@@ -44,7 +44,7 @@ function App() {
     };
 
     const closeShare = () => {
-      setShareImageOpen(false);
+        setShareImageOpen(false);
     };
 
     return (
@@ -59,25 +59,28 @@ function App() {
                     color: "white"
                 }}
             />
-            <AstroParallaxSearchBar value={initialSearch} startYearInitial={null} endYearInitial={null} doSearch={doSearch} />
+            <AstroParallaxSearchBar
+                value={initialSearch}
+                startYearInitial={null}
+                endYearInitial={null}
+                doSearch={doSearch}
+            />
             <div className='App-content' >
                 {isError && <div>Something went wrong ...</div>}
                 {isLoading &&
-                <div style={{display: 'flex', width: '100%', justifyContent: 'center'}}>
+                <div className='App-loading-container'>
                     <CircularProgress/>
                 </div>
                 }
                 {!isError && !isLoading && nasaImages &&
-                <>
-                    <Grid
-                        container
-                        direction="row"
-                        justify="flex-start"
-                        alignItems="stretch"
-                    >
-                        {nasaImages.map(i => <AstroGridItem key={i.nasaID} nasaImage={i} selectImage={selectImage} />)}
-                    </Grid>
-                </>
+                <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                >
+                    {nasaImages.map(i => <AstroGridItem key={i.nasaID} nasaImage={i} selectImage={selectImage} />)}
+                </Grid>
                 }
             </div>
             <AstroItemDialog
