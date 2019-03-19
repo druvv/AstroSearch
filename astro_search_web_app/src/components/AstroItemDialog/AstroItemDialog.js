@@ -1,5 +1,5 @@
 //@flow
-import React from 'react';
+import React, {useEffect} from 'react';
 // Data
 import { NASAImage } from "../../networking/Models";
 // Main Components
@@ -16,8 +16,14 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 /**
  * A NASA Image detail dialog.
  */
-function AstroItemDialog(props: ({open: boolean, onClose: (() => void), selectedImage?: NASAImage})) {
-    const { open, onClose, selectedImage } = props;
+function AstroItemDialog(props: ({
+    open: boolean,
+    onClose: (() => void),
+    onShare: (() => void),
+    selectedImage?: NASAImage })) {
+
+    const { open, onClose, onShare, selectedImage } = props;
+
     return (
         <Dialog fullScreen={false} open={open} fullWidth={true} maxWidth='md' onClose={onClose}>
             { selectedImage &&
@@ -57,6 +63,9 @@ function AstroItemDialog(props: ({open: boolean, onClose: (() => void), selected
                     </div>
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={ () => onShare()} color="seconday">
+                        Share
+                    </Button>
                     <Button onClick={ () => onClose()} color="primary">
                         Close
                     </Button>

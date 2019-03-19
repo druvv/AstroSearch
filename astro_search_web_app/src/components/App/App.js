@@ -11,9 +11,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {AstroParallaxSearchBar} from '../AstroParallaxSearchBar/AstroParallaxSearchBar'
 import {AstroGridItem} from "../AstroGridItem/AstroGridItem";
 import AstroItemDialog from "../AstroItemDialog/AstroItemDialog";
+import {AstroShareDialog} from "../AstroShareDialog/AstroShareDialog";
 import {NASAImage} from "../../networking/Models";
 // Styling
 import './App.css';
+
 
 function App() {
 
@@ -25,6 +27,8 @@ function App() {
     // ... all the way through its closing animation.
     const [lastSelectedImage, setLastSelectedImage] = useState(null);
     const [imageDetailOpen, setImageDetailOpen] = useState(false);
+    // Image sharing
+    const [shareImageOpen, setShareImageOpen] = useState(false);
 
     const closeSelectedImage = () => {
         setImageDetailOpen(false);
@@ -33,6 +37,14 @@ function App() {
     const selectImage = (image: NASAImage) => {
         setLastSelectedImage(image);
         setImageDetailOpen(true);
+    };
+
+    const shareCurrentImage = () => {
+        setShareImageOpen(true);
+    };
+
+    const closeShare = () => {
+      setShareImageOpen(false);
     };
 
     return (
@@ -47,7 +59,7 @@ function App() {
                     color: "white"
                 }}
             />
-            <AstroParallaxSearchBar value={initialSearch} doSearch={doSearch} />
+            <AstroParallaxSearchBar value={initialSearch} startYearInitial={null} endYearInitial={null} doSearch={doSearch} />
             <div className='App-content' >
                 {isError && <div>Something went wrong ...</div>}
                 {isLoading &&
@@ -71,6 +83,12 @@ function App() {
             <AstroItemDialog
                 open={imageDetailOpen}
                 onClose={closeSelectedImage}
+                onShare={shareCurrentImage}
+                selectedImage={lastSelectedImage}
+            />
+            <AstroShareDialog
+                open={shareImageOpen}
+                onClose={closeShare}
                 selectedImage={lastSelectedImage}
             />
         </div>

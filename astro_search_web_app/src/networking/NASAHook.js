@@ -152,16 +152,16 @@ function buildSearchRequest(searchText: string, startYear: ?string, endYear: ?st
 /**
  * A hook to debounce a function call.
  *
- * @param value The value that will be changing in a stateful manner;
- * @param func The function to call with the debounced value;
+ * @param values The values that will be changing in a stateful manner;
+ * @param func The function to call with the spread of the value array;
  * @param delay The delay that this function should debounce with.
  */
-export function useDebounce(value: any, func: (any) => void, delay: number) {
+export function useDebounce(values: Array<any>, func: (any) => void, delay: number) {
     useEffect(
         () => {
             // Set debouncedValue to value (passed in) after the specified delay
             const handler = setTimeout(() => {
-                func(value);
+                func(...values);
             }, delay);
 
             // Return a cleanup function that will be called every time
@@ -179,7 +179,7 @@ export function useDebounce(value: any, func: (any) => void, delay: number) {
         // Only re-call effect if value changes
         // You could also add the "delay" var to inputs array if you
         // ... need to be able to change that dynamically.
-        [value]
+        [...values]
     );
 }
 
