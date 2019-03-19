@@ -16,6 +16,9 @@ import Menu from "@material-ui/icons/Menu";
 // core components
 import headerStyle from "./HeaderStyle.js";
 
+/**
+ * A transparent header that changes to white after scrolling a certain distance.
+ */
 class AstroHeader extends React.Component {
     constructor(props) {
         super(props);

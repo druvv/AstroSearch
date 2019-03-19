@@ -13,6 +13,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "../CustomButtons/Button.js";
 
 import headerLinksStyle from "./HeaderLinksStyle.js";
+import Hidden from "@material-ui/core/Hidden";
 
 function HeaderLinks({ ...props }) {
     const { classes } = props;
@@ -21,9 +22,10 @@ function HeaderLinks({ ...props }) {
             <ListItem className={classes.listItem}>
                 <Tooltip
                     id="linkedin-tooltip"
-                    title="Checkout my LinkedIn profile"
+                    title="My LinkedIn"
                     placement={window.innerWidth > 959 ? "top" : "left"}
                     classes={{ tooltip: classes.tooltip }}
+                    disableHoverListener={window.innerWidth <= 959}
                 >
                     <Button
                         color="transparent"
@@ -32,16 +34,18 @@ function HeaderLinks({ ...props }) {
                         className={classes.navLink}
                     >
                         <i className={classes.socialIcons + " fab fa-linkedin"} />
+                        {window.innerWidth > 959 ? '' : 'My LinkedIn'}
                     </Button>
                 </Tooltip>
             </ListItem>
             <ListItem className={classes.listItem}>
-                <Tooltip
-                    id="github-tooltip"
-                    title="Project Github page"
-                    placement={window.innerWidth > 959 ? "top" : "left"}
-                    classes={{ tooltip: classes.tooltip }}
-                >
+                    <Tooltip
+                        id="github-tooltip"
+                        title="Project Github Page"
+                        placement={window.innerWidth > 959 ? "top" : "left"}
+                        classes={{ tooltip: classes.tooltip }}
+                        disableHoverListener={window.innerWidth <= 959}
+                    >
                     <Button
                         color="transparent"
                         href="https://github.com/dsringari/AstroSearch"
@@ -49,6 +53,7 @@ function HeaderLinks({ ...props }) {
                         className={classes.navLink}
                     >
                         <i className={classes.socialIcons + " fab fa-github"} />
+                        {window.innerWidth > 959 ? '' : 'Project Github Page'}
                     </Button>
                 </Tooltip>
             </ListItem>

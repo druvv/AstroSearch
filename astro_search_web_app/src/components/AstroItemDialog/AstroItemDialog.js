@@ -11,26 +11,27 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 // Styles
 import './AstroItemDialog.css';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
 /**
  * A NASA Image detail dialog.
  */
-export default function AstroItemDialog(props: ({
+function AstroItemDialog(props: ({
     open: boolean,
     onClose: (() => void),
     onShare: (() => void),
     selectedImage?: NASAImage })) {
 
-    const { open, onClose, onShare, selectedImage } = props;
+    const { open, onClose, onShare, selectedImage, fullScreen } = props;
 
     return (
-        <Dialog open={open} fullWidth={true} maxWidth='md' onClose={onClose}>
+        <Dialog open={open} fullScreen={fullScreen} fullWidth={true} maxWidth='md' onClose={onClose}>
             { selectedImage &&
             <>
                 <DialogTitle id='scroll-dialog-title'>{selectedImage.title}</DialogTitle>
                 <DialogContent>
                     <div className='split-content-box'>
-                        <div className='split-content-left'>
+                        <div className='split-content-one'>
                             <img
                                 className='image'
                                 alt={selectedImage.title}
@@ -48,10 +49,12 @@ export default function AstroItemDialog(props: ({
                                 </DialogContentText>
                             </div>
                         </div>
-                        <div className='split-content-right'>
-                            <DialogContentText variant='body1' gutterBottom={true}>
-                                {selectedImage.description}
-                            </DialogContentText>
+                        <div className='split-content-two'>
+                            <DialogContentText
+                                variant='body1'
+                                gutterBottom={true}
+                                dangerouslySetInnerHTML={{__html: selectedImage.description}}
+                            />
                             <DialogContentText variant='body1' gutterBottom={true}>
                                 {'Keywords: ' + selectedImage.keywords.join(', ')}
                             </DialogContentText>
@@ -74,3 +77,5 @@ export default function AstroItemDialog(props: ({
         </Dialog>
     );
 }
+
+export default withMobileDialog()(AstroItemDialog);

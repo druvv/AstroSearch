@@ -12,6 +12,7 @@ import {InlineDatePicker} from "material-ui-pickers";
 import {MuiPickersUtilsProvider} from 'material-ui-pickers';
 //Styles
 import './AstroParallaxSearchBar.css'
+import Hidden from "@material-ui/core/es/Hidden/Hidden";
 
 /**
  * A search bar with a parallax effect and image subheader
@@ -80,6 +81,7 @@ export function AstroParallaxSearchBar(props: {
                         classes={{root: 'inputRoot', input: 'inputInput'}}
                         placeholder="Search the stars…"
                     />
+                    <Hidden xsDown >
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <InlineDatePicker
                             className='inputDate-left'
@@ -110,6 +112,7 @@ export function AstroParallaxSearchBar(props: {
                             mask={[/\d/, /\d/, /\d/, /\d/]}
                         />
                     </MuiPickersUtilsProvider>
+                    </Hidden>
                 </div>
             </div>
         </Parallax>
