@@ -24,6 +24,9 @@
     background-color: rgba(114, 66, 117, 0.5);
     margin-right: 16px;
     width: 70%;
+    height: 60px;
+    display: flex;
+    align-items: center;
 }
 
 .search:hover, .search:focus-within {
@@ -46,9 +49,9 @@
 
 .inputRoot {
     color: inherit;
-    width: calc(100% - 36px);
+    width: calc(100% - 36px - 150px);
     padding-left: 36px;
-    height: 42px;
+    height: 100%;
 }
 
 .inputInput {
@@ -57,4 +60,13 @@
     padding-bottom: 8px;
     padding-left: 80px;
     width: 100%;
+}
+
+.inputDate, .inputDate-left {
+    width: 150px;
+    height: 48px;
+}
+
+.inputDate-left {
+    margin-right: 8px;
 }
