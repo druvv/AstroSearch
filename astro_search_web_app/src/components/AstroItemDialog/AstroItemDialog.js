@@ -1,5 +1,5 @@
 //@flow
-import React, {useEffect} from 'react';
+import React from 'react';
 // Data
 import { NASAImage } from "../../networking/Models";
 // Main Components
@@ -11,12 +11,11 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 // Styles
 import './AstroItemDialog.css';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
 
 /**
  * A NASA Image detail dialog.
  */
-function AstroItemDialog(props: ({
+export default function AstroItemDialog(props: ({
     open: boolean,
     onClose: (() => void),
     onShare: (() => void),
@@ -25,7 +24,7 @@ function AstroItemDialog(props: ({
     const { open, onClose, onShare, selectedImage } = props;
 
     return (
-        <Dialog fullScreen={false} open={open} fullWidth={true} maxWidth='md' onClose={onClose}>
+        <Dialog open={open} fullWidth={true} maxWidth='md' onClose={onClose}>
             { selectedImage &&
             <>
                 <DialogTitle id='scroll-dialog-title'>{selectedImage.title}</DialogTitle>
@@ -63,7 +62,7 @@ function AstroItemDialog(props: ({
                     </div>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={ () => onShare()} color="seconday">
+                    <Button onClick={ () => onShare()} color="secondary">
                         Share
                     </Button>
                     <Button onClick={ () => onClose()} color="primary">
@@ -75,5 +74,3 @@ function AstroItemDialog(props: ({
         </Dialog>
     );
 }
-
-export default withMobileDialog()(AstroItemDialog);

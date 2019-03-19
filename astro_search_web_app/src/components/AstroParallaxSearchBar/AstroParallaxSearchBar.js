@@ -3,7 +3,7 @@ import React, {useState} from "react";
 // Data
 import {useDebounce} from "../../networking/NASAHook";
 import DateFnsUtils from '@date-io/date-fns';
-// Main Componenets
+// Main Components
 import Parallax from '../Parallax/Parallax';
 import HeaderBackground from "../../assets/img/header-bg.jpg";
 import InputBase from '@material-ui/core/InputBase';
@@ -60,7 +60,6 @@ export function AstroParallaxSearchBar(props: {
             setEndYear(null);
         }
     }
-
 
     return (
         <Parallax small image={HeaderBackground}>
