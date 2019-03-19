@@ -9,11 +9,13 @@ import List from "@material-ui/core/List";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/es/ListItemText/ListItemText";
 import Button from "@material-ui/core/Button";
+import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
+import ListItem from "@material-ui/core/es/ListItem/ListItem";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 // Icons
 import Reddit from 'mdi-material-ui/Reddit';
 import Twitter from 'mdi-material-ui/Twitter';
-import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
-import ListItem from "@material-ui/core/es/ListItem/ListItem";
+import ContentCopy from 'mdi-material-ui/ContentCopy';
 
 function buildShareURL(nasaImage: NASAImage): string {
     return encodeURI('https://images.nasa.gov/details-' + nasaImage.nasaID + '.html');
@@ -22,8 +24,13 @@ function buildShareURL(nasaImage: NASAImage): string {
 /**
  * A dialog to share the selected image to Reddit or Twitter.
  */
-export function AstroShareDialog(props: {open: boolean, onClose: () => void, selectedImage: ?NASAImage}) {
-    const { open, onClose, selectedImage } = props;
+export function AstroShareDialog(props: {
+    open: boolean,
+    onClose: () => void,
+    showCopyConfirmation: () => void,
+    selectedImage: ?NASAImage
+}) {
+    const { open, onClose, showCopyConfirmation, selectedImage } = props;
 
     function openReddit() {
         if (!selectedImage) { return }
@@ -40,6 +47,11 @@ export function AstroShareDialog(props: {open: boolean, onClose: () => void, sel
         const url = buildShareURL(selectedImage);
         const twitterShareURL = 'https://twitter.com/intent/tweet?text=' + url;
         window.open(twitterShareURL);
+        onClose();
+    }
+
+    function onCopy() {
+        showCopyConfirmation();
         onClose();
     }
 
@@ -60,6 +72,14 @@ export function AstroShareDialog(props: {open: boolean, onClose: () => void, sel
                             <ListItemText primary='Twitter'/>
                         </ListItemIcon>
                     </ListItem>
+                    <CopyToClipboard text={selectedImage ? buildShareURL(selectedImage) : ''} onCopy={onCopy}>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <ContentCopy/>
+                                <ListItemText primary='Copy'/>
+                            </ListItemIcon>
+                        </ListItem>
+                    </CopyToClipboard>
                 </List>
             </div>
             <DialogActions>

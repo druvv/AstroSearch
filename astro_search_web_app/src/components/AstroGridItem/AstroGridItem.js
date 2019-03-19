@@ -12,7 +12,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import './AstroGridItem.css'
 
 /**
- * The Material Grid Item for a NASAImage
+ * The Material Grid Item for a NASAImage.
  */
 export function AstroGridItem(props: {nasaImage: NASAImage, selectImage: (i: NASAImage) => void}) {
     const { nasaImage, selectImage } = props;
