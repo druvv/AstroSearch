@@ -5,87 +5,27 @@ import { Request, NASAImage } from "./Models";
 
 const API_URL_SEARCH = 'https://images-api.nasa.gov/search';
 
-function dataFetchReducer(state, action) {
-    switch (action.type) {
-        case 'FETCH_INIT':
-            return {
-                ...state,
-                isLoading: true,
-                isError: false
-            };
-        case 'FETCH_SUCCESS':
-            return {
-                ...state,
-                isLoading: false,
-                isError: false,
-                data: action.payload,
-            };
-        case 'FETCH_FAILURE':
-            return {
-                ...state,
-                isLoading: false,
-                isError: true,
-            };
-        default:
-            throw new Error();
-    }
-}
-
 /**
- * A React Hook that uses axios to make a request and return the data asynchronously using the components state.
- * @param {Request} initialRequest - The initial request with which to make a call.
- * @param {*} initialData - The initial state of the data object.
- * @returns {*[]}  An array of format [isLoading, isError, data, doFetch(Request)].
+ * A React Hook that simplifies the usage of the NASA image search api.
+ * @param initialSearchText - The initial search text for the function.
+ * @returns An object of {isLoading, isError, data, doSearch(string, ?string, ?string)} where doSearch
+ * searches with the given searchText, and optional start and end years.
  */
-function useDataAPI(initialRequest: Request, initialData) {
-    const [request, setRequest] = useState(initialRequest);
+export function useNASASearch(initialSearchText: string): {
+    isLoading: boolean,
+    isError: boolean,
+    nasaImages: ?[NASAImage],
+    doSearch: ((searchText: string, startYear: ?string, endYear: ?string) => void)
+} {
 
-    const [state, dispatch] = useReducer(dataFetchReducer, {
-        isLoading: false,
-        isError: false,
-        data: initialData,
-    });
+    const [ isLoading, isError, data, doFetch] = useDataAPI(buildSearchRequest(initialSearchText),null);
 
-    useEffect(() => {
-        let didCancel = false;
-
-        const fetchData = async () => {
-            dispatch({ type: 'FETCH_INIT' });
-
-            try {
-                const result = await axios.get(request.url, {params: request.params});
-                if (!didCancel) {
-                    console.log(result);
-                    // If a postFunction was passed with the request, use it to parse the data,
-                    // and update the payload with the result.
-                    if (request.postFunction) {
-                        dispatch({ type: 'FETCH_SUCCESS', payload: request.postFunction(result.data)});
-                    } else {
-                        dispatch({ type: 'FETCH_SUCCESS', payload: result.data});
-                    }
-                }
-            } catch (error) {
-                if (!didCancel) {
-                    dispatch({ type: 'FETCH_FAILURE' });
-                }
-                console.log("Data Fetch Error: " + error.toString())
-            }
-        };
-
-        // Intentionally ignore resulting promise... Response from fetch request will update the component's state.
-        fetchData();
-
-        // If the component unmounts before the request finish avoid updating the state.
-        return () => {
-            didCancel = true;
-        };
-    }, [request]);
-
-    const doFetch = (request: Request) => {
-        setRequest(request);
+    const doSearch = (searchText: string, startYear: ?string, endYear: ?string) => {
+        const request = buildSearchRequest(searchText, startYear, endYear);
+        doFetch(request);
     };
 
-    return [ state.isLoading, state.isError, state.data, doFetch ];
+    return {isLoading: isLoading, isError: isError, nasaImages: data, doSearch: doSearch};
 }
 
 /**
@@ -150,6 +90,63 @@ function buildSearchRequest(searchText: string, startYear: ?string, endYear: ?st
 }
 
 /**
+ * A React Hook that uses axios to make a request and return the data asynchronously using the components state.
+ * @param {Request} initialRequest - The initial request with which to make a call.
+ * @param {*} initialData - The initial state of the data object.
+ * @returns {*[]}  An array of format [isLoading, isError, data, doFetch(Request)].
+ */
+function useDataAPI(initialRequest: Request, initialData) {
+    const [request, setRequest] = useState(initialRequest);
+
+    const [state, dispatch] = useReducer(dataFetchReducer, {
+        isLoading: false,
+        isError: false,
+        data: initialData,
+    });
+
+    useEffect(() => {
+        let didCancel = false;
+
+        const fetchData = async () => {
+            dispatch({ type: 'FETCH_INIT' });
+
+            try {
+                const result = await axios.get(request.url, {params: request.params});
+                if (!didCancel) {
+                    console.log(result);
+                    // If a postFunction was passed with the request, use it to parse the data,
+                    // and update the payload with the result.
+                    if (request.postFunction) {
+                        dispatch({ type: 'FETCH_SUCCESS', payload: request.postFunction(result.data)});
+                    } else {
+                        dispatch({ type: 'FETCH_SUCCESS', payload: result.data});
+                    }
+                }
+            } catch (error) {
+                if (!didCancel) {
+                    dispatch({ type: 'FETCH_FAILURE' });
+                }
+                console.log("Data Fetch Error: " + error.toString())
+            }
+        };
+
+        // Intentionally ignore resulting promise... Response from fetch request will update the component's state.
+        fetchData();
+
+        // If the component unmounts before the request finish avoid updating the state.
+        return () => {
+            didCancel = true;
+        };
+    }, [request]);
+
+    const doFetch = (request: Request) => {
+        setRequest(request);
+    };
+
+    return [ state.isLoading, state.isError, state.data, doFetch ];
+}
+
+/**
  * A hook to debounce a function call.
  *
  * @param values The values that will be changing in a stateful manner.
@@ -183,25 +180,29 @@ export function useDebounce(values: Array<any>, func: (any) => void, delay: numb
     );
 }
 
-/**
- * A React Hook that simplifies the usage of the NASA image search api.
- * @param initialSearchText - The initial search text for the function.
- * @returns An object of {isLoading, isError, data, doSearch(string, ?string, ?string)} where doSearch
- * searches with the given searchText, and optional start and end years.
- */
-export function useNASASearch(initialSearchText: string): {
-    isLoading: boolean,
-    isError: boolean,
-    nasaImages: ?[NASAImage],
-    doSearch: ((searchText: string, startYear: ?string, endYear: ?string) => void)
-} {
-
-    const [ isLoading, isError, data, doFetch] = useDataAPI(buildSearchRequest(initialSearchText),null);
-
-    const doSearch = (searchText: string, startYear: ?string, endYear: ?string) => {
-        const request = buildSearchRequest(searchText, startYear, endYear);
-        doFetch(request);
-    };
-
-    return {isLoading: isLoading, isError: isError, nasaImages: data, doSearch: doSearch};
+function dataFetchReducer(state, action) {
+    switch (action.type) {
+        case 'FETCH_INIT':
+            return {
+                ...state,
+                isLoading: true,
+                isError: false
+            };
+        case 'FETCH_SUCCESS':
+            return {
+                ...state,
+                isLoading: false,
+                isError: false,
+                data: action.payload,
+            };
+        case 'FETCH_FAILURE':
+            return {
+                ...state,
+                isLoading: false,
+                isError: true,
+            };
+        default:
+            throw new Error();
+    }
 }
+
